@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CursorTrail : MonoBehaviour
@@ -75,7 +73,8 @@ public class CursorTrail : MonoBehaviour
                     emission.rateOverTime = 0.0f;
                 }
             }
-        } else
+        }
+        else
         {
             // Use touch input
             if (Input.touchCount > 0)
@@ -115,7 +114,7 @@ public class CursorTrail : MonoBehaviour
                     emission.rateOverTime = 0.0f;
                 }
             }
-        }        
+        }
     }
     private float descreaseStamina(float rate)
     {

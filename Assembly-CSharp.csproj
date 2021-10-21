@@ -56,7 +56,10 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Managers\Entity\PhaseRun.cs" />
     <Compile Include="Assets\Scripts\Field\Field.cs" />
+    <Compile Include="Assets\Scripts\Utils\DebugGizmos.cs" />
+    <Compile Include="Assets\Scripts\Utils\Logger.cs" />
     <Compile Include="Assets\Scripts\Trail\CursorTrail.cs" />
     <Compile Include="Assets\Scripts\Managers\PhaseManager.cs" />
     <Compile Include="Assets\Scripts\Managers\Entity\Phase.cs" />

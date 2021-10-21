@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Field : MonoBehaviour
 {
@@ -33,14 +31,8 @@ public class Field : MonoBehaviour
         setHitSpots();
         setHitArea();
         _boxCollider.size = hitRect.size; new Vector3(hitRect.x, hitRect.y, depth);
-        _backgroundCamera.orthographicSize = hitRect.size.y/2;
+        _backgroundCamera.orthographicSize = hitRect.size.y / 2;
         gameObject.GetComponent<Renderer>().material.color = Color.white;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public float getPointsDistance(Vector2 a, Vector2 b)
@@ -58,17 +50,18 @@ public class Field : MonoBehaviour
         this.hitRect = rect;
     }
 
-    public List<Vector2> getHitSpots() { 
+    public List<Vector2> getHitSpots()
+    {
         return this.hitSpots;
     }
 
     public void setHitSpots()
     {
         List<Vector2> hitSpots = new List<Vector2>();
-        Vector2 upLeft = new Vector2(-hitRect.width/2, hitRect.height/2);
-        Vector2 upRight = new Vector2(hitRect.width/2, hitRect.height/2);
-        Vector2 bottomRight = new Vector2(hitRect.width/2, -hitRect.height/2);
-        Vector2 bottomLeft = new Vector2(-hitRect.width/2, -hitRect.height/2);
+        Vector2 upLeft = new Vector2(-hitRect.width / 2, hitRect.height / 2);
+        Vector2 upRight = new Vector2(hitRect.width / 2, hitRect.height / 2);
+        Vector2 bottomRight = new Vector2(hitRect.width / 2, -hitRect.height / 2);
+        Vector2 bottomLeft = new Vector2(-hitRect.width / 2, -hitRect.height / 2);
 
         //Setting field perimeter
         float approximation = 0.1f;
@@ -122,15 +115,17 @@ public class Field : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.tag == "Player")
+        if (other.tag == "Player")
         {
             if (_ball.GetComponent<BallStats>().canDie)
             {
                 _ball.GetComponent<BallStats>().restart();
-            } else
+            }
+            else
             {
                 _ball.GetComponent<BallBehaviour>().collided();
                 _ball.GetComponent<BallBehaviour>().target = new Vector3(0, 0, 0);
+                _ball.transform.position = new Vector3(0, 0, 0);
             }
         }
     }

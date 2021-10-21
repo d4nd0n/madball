@@ -293,6 +293,8 @@
 "Assets/Scripts/Managers/PhaseManager.cs"
 "Assets/Scripts/Managers/TimeManager.cs"
 "Assets/Scripts/Trail/CursorTrail.cs"
+"Assets/Scripts/Utils/DebugGizmos.cs"
+"Assets/Scripts/Utils/Logger.cs"
 -langversion:8.0
 
 /deterministic

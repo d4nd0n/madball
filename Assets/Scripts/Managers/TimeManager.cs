@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,9 +16,11 @@ public class TimeManager : MonoBehaviour
     [SerializeField]
     private Text _timerTextMin;
     [SerializeField]
-    private float timer;
-    [SerializeField]
     private bool isActive;
+    [SerializeField]
+    private GameObject _pm;
+
+    public static float timer;
     public static bool _isPlaying;
 
     // Start is called before the first frame update
@@ -31,12 +31,15 @@ public class TimeManager : MonoBehaviour
         _isPlaying = false;
         isActive = false;
         setUi(true);
+        // Set phase manager to false when timer not run, managed in execution order
+        _pm.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isActive) {
+        if (isActive)
+        {
             timer = timerManager();
             if (_isPlaying)
             { //Play
@@ -57,10 +60,11 @@ public class TimeManager : MonoBehaviour
 
     public void Play()
     {
-        timer = 1;
+        timer = 0;
         _isPlaying = true;
         isActive = true;
         setUi(false);
+        _pm.SetActive(true);
     }
 
     public void Stop()
@@ -69,6 +73,7 @@ public class TimeManager : MonoBehaviour
         isActive = false;
         setUi(true);
         timer = 0;
+        _pm.SetActive(false);
     }
 
     public float timerManager()
@@ -96,5 +101,5 @@ public class TimeManager : MonoBehaviour
         }
 
     }
-    public float getTimer() { return timer; }
+    public static float getTimer() { return timer; }
 }

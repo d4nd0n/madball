@@ -25,8 +25,23 @@ public class PhaseManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //StartCoroutine(phaseTimer(currentPhase));
         microPhases = new List<Phase>();
+        float duration = 0;
+        // Run init behaviour of phases
+        foreach (Phase phase in _phases)
+        {
+            phase.IsRunning = false;
+            duration = 0;
+            if (phase.IsMacro)
+            {
+                foreach (Phase micro in phase.MicroPhase)
+                {
+                    duration = duration + micro.Duration;
+                }
+                phase.Duration = duration;
+            }
+        }
+        phaseRunById("init");
     }
 
     // Update is called once per frame
@@ -44,81 +59,69 @@ public class PhaseManager : MonoBehaviour
         Phase phase;
         // 0: init, 3: attack, 10: idle, 13: attack
         // Set the phase based on time
-        if (currentPhase.IsMacro && currentPhase.IsRunning) { // Macro phase
-            if (microPhases.Count > 0 && !microPhases[0].IsRunning) {
-                print(microPhases.Count + ", " + !microPhases[0].IsRunning);
-                currentMicroPhase = microPhases[0];
-                phaseManager(microPhases[0]);
-                //StartCoroutine(phaseTimer(microPhases[0]));
-                //microPhases[0].IsRunning = false;
+        if (currentPhase.IsRunning)
+        { // Macro phase
+            print(currentPhase.Id);
+            // This manage the microphases into Macro phase like a Pila
+            if (microPhases.Count > 0 && !microPhases[0].IsRunning)
+            { // Micro Phase
+                phaseRun(microPhases[0]);
                 microPhases.Remove(microPhases[0]);
             }
-        } else if (!currentPhase.IsRunning) {
-            if(currentPhase.NextPhases.Count > 0)
+        }
+        else
+        { // Manage the selection of a new phase
+            if (currentPhase.NextPhases.Count > 0)
             {
-                phase = currentPhase.NextPhases[Random.Range(0, currentPhase.NextPhases.Count-1)];
-            } else  {
-                float time = _tm.getTimer();
-                float roundTime = Mathf.RoundToInt(time);
-                // Here change the phase
-                switch (roundTime)
+                // Choose randomly the next phase from NextPhases list
+                phase = currentPhase.NextPhases[Random.Range(0, currentPhase.NextPhases.Count - 1)];
+                if (phase.IsMacro)
                 {
-                    case 1:
-                        // Init
-                        phaseCount = 0;
-                        break;
-                    case 3:
-                        // Attack
-                        phaseCount = 2;
-                        break;
-                    case 10:
-                        // idle
-                        phaseCount = 1;
-                        break;
-                    case 13:
-                        // attack
-                        phaseCount = 2;
-                        break;
+                    microPhases.AddRange(phase.MicroPhase);
                 }
-                phase = _phases[phaseCount];
-            }
-            if (phase.IsMacro) {
-                microPhases.AddRange(phase.MicroPhase);
-            }
-            currentPhase = phase;
-
-            if (!phase.Equals(phaseHistory[phaseHistory.Count - 1]))
-            {
-                print(string.Format("===== {0} phase at time: {1} =====", phase.name, _tm.getTimer().ToString()));
-                // Adding phase to phaseHistory
-                phaseHistory.Add(phase);
-                phaseManager(phase);
+                if (!phase.Equals(phaseHistory[phaseHistory.Count - 1]))
+                {
+                    // Adding phase to phaseHistory
+                    phaseHistory.Add(phase);
+                    phaseRun(phase);
+                }
             }
         }
     }
-
-    void phaseManager(Phase phase)
+    private void phaseRun(Phase phase)
     {
-        // Phase division
-        // Execute phase one by one
-        //Avvio la prima fase e da questa viene tolto time delta time
-        if (!phase.IsRunning)
+        Logger.logWithTime(string.Format("Started phase: {0}", phase.Id));
+        foreach(Phase p in phase.MicroPhase)
         {
-            _ballAnimator.SetTrigger(phase.name);
-            _ballBehaviour.ballPhase(phase);
-            if(phase.name.Equals("base_attack"))
+            Logger.logWithTime(string.Format("Have phase: {0}", p.Id));
+        }
+        StartCoroutine(phaseTimer(phase));
+        _ballBehaviour.ballPhase(phase);
+        if (phase.IsMacro)
+        {
+            currentPhase = phase;
+        }
+        else
+        {
+            currentMicroPhase = phase;
+        }
+    }
+    public void phaseRunById(string id)
+    {
+        foreach (Phase phase in _phases)
+        {
+            if (phase.Id == id)
             {
-                print("ok");
+                phaseRun(phase);
+                break;
             }
-            StartCoroutine(phaseTimer(phase));
         }
     }
     public IEnumerator phaseTimer(Phase phase)
     {
-        //Debug.Log(phase.name + " phase iniziata");
+        // Start a timer for the duration of the phase
         phase.IsRunning = true;
         yield return new WaitForSeconds(phase.Duration);
-        //Debug.Log(phase.name + " phase finita");
         phase.IsRunning = false;
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,19 +5,19 @@ using UnityEngine;
 public class Phase : ScriptableObject
 {
     [SerializeField]
-    private string name;
+    private string id;
     [SerializeField]
     private float duration;
     [SerializeField]
     private bool isMacro;
-    [SerializeField]    
+    [SerializeField]
     private bool isRunning;
     [SerializeField]
     private List<Phase> nextPhases = new List<Phase>();
     [SerializeField]
     private List<Phase> microPhase;
 
-    public string Name { get => name; set => name = value; }
+    public string Id { get => id; set => id = value; }
     public float Duration { get => duration; set => duration = value; }
     public bool IsMacro { get => isMacro; set => isMacro = value; }
     public bool IsRunning { get => isRunning; set => isRunning = value; }

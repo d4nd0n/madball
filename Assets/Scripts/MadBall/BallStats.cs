@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BallStats : MonoBehaviour
@@ -37,16 +36,20 @@ public class BallStats : MonoBehaviour
         rb = transform.GetComponent<Rigidbody>();
     }
 
-    public float getForce() {
+    public float getForce()
+    {
         return force;
     }
-    public float getStamina() {
+    public float getStamina()
+    {
         return stamina;
     }
-    public float getSpeed() {
+    public float getSpeed()
+    {
         return speed;
     }
-    public float getAttackDelay() {
+    public float getAttackDelay()
+    {
         return attackDelay;
     }
 
@@ -70,15 +73,18 @@ public class BallStats : MonoBehaviour
     {
         yield return new WaitForSeconds(20f);
         print("INCREASE STATS NOW");
-        
+
         //Setting caps
-        if(speed <= 10f) {
+        if (speed <= 10f)
+        {
             speed *= 1.2f;
         }
-        if(attackDelay >= 0.5) {
+        if (attackDelay >= 0.5)
+        {
             attackDelay = attackDelay / 2;
         }
-        if (force <= 1f) { 
+        if (force <= 1f)
+        {
             force = force + 0.05f;
         }
         if (_isPlaying)
